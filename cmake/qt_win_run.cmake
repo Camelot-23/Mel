@@ -28,27 +28,37 @@ message(STATUS "QT_INSTALL_PATH: ${QT_INSTALL_PATH}")
 #   target - 目标名称
 #   ARGN   - 一个或多个Qt模块名称（不带Qt5/Qt6前缀）
 # 
+# 注意:
+#   - 自动检测 Qt 版本（Qt5 或 Qt6）
+#   - 需要在调用前设置 QT_VERSION_MAJOR 变量
+# 
 # 示例:
 #   copy_qt_libs(${PROJECT_NAME}
 #       Core
 #       Gui
 #       Widgets
 #   )
-#   # 结果: 拷贝Qt5Core.dll, Qt5Gui.dll, Qt5Widgets.dll
+#   # 结果: Qt5 拷贝 Qt5Core.dll，Qt6 拷贝 Qt6Core.dll
 function(copy_qt_libs target)
     if(NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
         return()
     endif()
+    
+    if(NOT DEFINED QT_VERSION_MAJOR)
+        message(FATAL_ERROR "QT_VERSION_MAJOR 未定义，请先调用 init_qt()")
+    endif()
+    
     add_custom_command(
             TARGET ${target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "TARGET:${target}, FILE:$<TARGET_FILE:${target}>"
     )
     foreach(QT_LIB IN LISTS ARGN)
+        set(QT_DLL_NAME "Qt${QT_VERSION_MAJOR}${QT_LIB}${DEBUG_SUFFIX}.dll")
         add_custom_command(
                 TARGET ${target} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E echo "COPY QT LIB: ${QT_INSTALL_PATH}/bin/Qt5${QT_LIB}${DEBUG_SUFFIX}.dll"
+                COMMAND ${CMAKE_COMMAND} -E echo "COPY QT LIB: ${QT_INSTALL_PATH}/bin/${QT_DLL_NAME}"
                 COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/bin/Qt5${QT_LIB}${DEBUG_SUFFIX}.dll"
+                "${QT_INSTALL_PATH}/bin/${QT_DLL_NAME}"
                 "$<TARGET_FILE_DIR:${target}>"
         )
     endforeach()
