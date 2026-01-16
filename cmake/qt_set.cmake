@@ -35,9 +35,4 @@ function(set_qt_libs target)
     endforeach ()
 
     target_link_libraries(${target} PUBLIC ${QT_VERSION_LIBS})
-
-    message(STATUS "============ ${target} ===========")
-    message(STATUS "所需模块    : ${QT_LIBS}")
-    message(STATUS "链接库列表  : ${QT_VERSION_LIBS}")
-    message(STATUS "============ ${target} ===========")
 endfunction()
