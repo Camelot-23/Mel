@@ -64,6 +64,31 @@ function(copy_qt_libs target)
     endforeach()
 endfunction()
 
+function(copy_qt_path_libs target)
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
+        return()
+    endif()
+
+    if(NOT DEFINED QT_VERSION_MAJOR)
+        message(FATAL_ERROR "QT_VERSION_MAJOR 未定义，请先调用 init_qt()")
+    endif()
+
+    add_custom_command(
+            TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "TARGET:${target}, FILE:$<TARGET_FILE:${target}>"
+    )
+    foreach(QT_PATH_LIB IN LISTS ARGN)
+        set(QT_DLL_NAME "${QT_PATH_LIB}${DEBUG_SUFFIX}.dll")
+        add_custom_command(
+                TARGET ${target} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E echo "COPY QT PATH LIB: ${QT_INSTALL_PATH}/bin/${QT_DLL_NAME}"
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${QT_INSTALL_PATH}/bin/${QT_DLL_NAME}"
+                "$<TARGET_FILE_DIR:${target}>"
+        )
+    endforeach()
+endfunction()
+
 # 拷贝Qt插件库到目标二进制输出目录
 # 
 # 参数:

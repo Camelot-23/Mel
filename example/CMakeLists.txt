@@ -36,6 +36,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Mel ElaWidgetTools)
 
 # Windows 平台特定配置
 set(QT_LIBS Core Gui Widgets)
+# MinGW 需要额外的运行时库
+set(QT_PATH_LIBS libwinpthread-1 libstdc++-6 libgcc_s_seh-1)
 set(QT_PLUGINS
         styles/qwindowsvistastyle
         platforms/qwindows
@@ -48,6 +50,9 @@ if(WIN32)
 
     include(${CMAKE_SOURCE_DIR}/cmake/qt_win_run.cmake)
     copy_qt_libs(${PROJECT_NAME} ${QT_LIBS})
+    if (MINGW)
+        copy_qt_path_libs(${PROJECT_NAME} ${QT_PATH_LIBS})
+    endif()
     copy_qt_plugins(${PROJECT_NAME} ${QT_PLUGINS})
 endif()
 
