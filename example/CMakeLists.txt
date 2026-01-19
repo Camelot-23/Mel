@@ -54,12 +54,25 @@ if(WIN32)
         copy_qt_path_libs(${PROJECT_NAME} ${QT_PATH_LIBS})
     endif()
     copy_qt_plugins(${PROJECT_NAME} ${QT_PLUGINS})
+    
+    # 引入安装函数
+    include(${CMAKE_SOURCE_DIR}/cmake/win_install.cmake)
+    include(${CMAKE_SOURCE_DIR}/cmake/qt_win_install.cmake)
 endif()
 
 # 安装示例可执行文件
 install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin
 )
+
+#if(WIN32)
+#    install_target(Mel ElaWidgetTools)
+#    install_qt_libs(${QT_LIBS})
+#    if(MINGW)
+#        install_qt_path_libs(${QT_PATH_LIBS})
+#    endif()
+#    install_qt_plugins(${QT_PLUGINS})
+#endif()
 
 # 配置摘要
 message(STATUS "")
