@@ -10,6 +10,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# MSVC 设置英文输出（避免中文乱码）
+if(MSVC)
+    set(ENV{VSLANG} 1033)
+    # 设置为1033后报错信息会正常显示为英语，但是会打印非常多的 [including file]信息
+endif()
+
 # 输出目录设置
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -24,7 +30,6 @@ option(BUILD_EXAMPLES "构建示例应用" ON)
 
 add_subdirectory(Mel)
 
-# ========== 可选：添加 Example 示例应用 ==========
 if(BUILD_EXAMPLES)
     add_subdirectory(example)
 endif()

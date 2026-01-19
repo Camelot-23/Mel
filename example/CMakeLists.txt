@@ -21,7 +21,14 @@ endif()
 
 # 设置编译选项
 if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /utf-8)
+    # 移除默认的 /W3，避免与 /W4 冲突
+    string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    
+    target_compile_options(${PROJECT_NAME} PRIVATE 
+        /W4                          # 警告级别 4
+        /utf-8                       # 设置源和执行字符集为 UTF-8
+        /wd4819                      # 禁用代码页警告
+    )
 elseif(MINGW)
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 else()
@@ -33,6 +40,9 @@ include(../cmake/ela.cmake)
 
 # 链接 Mel ElaWidgetTools
 target_link_libraries(${PROJECT_NAME} PRIVATE Mel ElaWidgetTools)
+
+# 目前看来generate_export_header会自动处理静态/动态库的宏定义,不用额外定义 MEL_STATIC_DEFINE
+# target_compile_definitions(${PROJECT_NAME} PRIVATE MEL_STATIC_DEFINE)
 
 # Windows 平台特定配置
 set(QT_LIBS Core Gui Widgets)

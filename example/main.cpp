@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     // mainWindow.show();
 
     Mel::MelLib melLib;
-    qDebug() << "mel version:" << melLib.getVersion();
+    qDebug() << "Mel version:" << Mel::MelLib::getVersion();
 
     ElaWindow window;
     window.show();
