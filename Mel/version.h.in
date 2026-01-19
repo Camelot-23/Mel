@@ -1,0 +1,107 @@
+#ifndef @PROJECT_NAME_UPPER@_VERSION_H
+#define @PROJECT_NAME_UPPER@_VERSION_H
+
+// 此文件由 CMake 自动生成，请勿手动编辑
+// 
+// @PROJECT_NAME@ 库版本信息
+// 当前版本: @PROJECT_VERSION@
+
+// ============================================================================
+// 版本号定义
+// ============================================================================
+
+// 主版本号、次版本号、修订号
+#define @PROJECT_NAME_UPPER@_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define @PROJECT_NAME_UPPER@_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define @PROJECT_NAME_UPPER@_VERSION_PATCH @PROJECT_VERSION_PATCH@
+
+// 完整版本字符串
+#define @PROJECT_NAME_UPPER@_VERSION_STRING "@PROJECT_VERSION@"
+
+// 版本号组合宏（用于版本比较）
+// 计算规则: major * 10000 + minor * 100 + patch
+// 例如: 1.2.3 -> 10203, 2.0.0 -> 20000
+#define @PROJECT_NAME_UPPER@_VERSION_NUMBER (@PROJECT_NAME_UPPER@_VERSION_MAJOR * 10000 + @PROJECT_NAME_UPPER@_VERSION_MINOR * 100 + @PROJECT_NAME_UPPER@_VERSION_PATCH)
+
+// ============================================================================
+// 版本检查宏
+// ============================================================================
+
+// 用于编译时检查 @PROJECT_NAME@ 版本是否满足要求
+// 参数: major - 主版本号, minor - 次版本号, patch - 修订号
+// 返回: 版本号的数值表示
+#define @PROJECT_NAME_UPPER@_VERSION_CHECK(major, minor, patch) ((major * 10000) + (minor * 100) + patch)
+
+// ============================================================================
+// 使用示例
+// ============================================================================
+
+// 示例 1: 检查版本是否大于等于某个版本（最常用）
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER >= @PROJECT_NAME_UPPER@_VERSION_CHECK(1, 0, 0)
+//     // 使用 1.0.0 及以上版本的 API
+//     void useNewFeature() {
+//         // 新功能代码
+//     }
+// #endif
+
+// 示例 2: 检查版本是否小于某个版本
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER < @PROJECT_NAME_UPPER@_VERSION_CHECK(2, 0, 0)
+//     // 针对 2.0.0 以下版本的兼容代码
+//     void legacyCode() {
+//         // 旧版本代码
+//     }
+// #endif
+
+// 示例 3: 检查版本是否等于某个版本（不推荐，除非必要）
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER == @PROJECT_NAME_UPPER@_VERSION_CHECK(1, 0, 1)
+//     // 只在 1.0.1 版本执行的代码
+//     #warning "Using @PROJECT_NAME@ 1.0.1 specific code"
+// #endif
+
+// 示例 4: 版本范围检查
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER >= @PROJECT_NAME_UPPER@_VERSION_CHECK(1, 0, 0) && @PROJECT_NAME_UPPER@_VERSION_NUMBER < @PROJECT_NAME_UPPER@_VERSION_CHECK(2, 0, 0)
+//     // 只支持 1.x.x 系列版本
+//     #define @PROJECT_NAME_UPPER@_VERSION_1X
+// #endif
+
+// 示例 5: 最低版本要求（编译时错误）
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER < @PROJECT_NAME_UPPER@_VERSION_CHECK(1, 0, 0)
+//     #error "This code requires @PROJECT_NAME@ 1.0.0 or later"
+// #endif
+
+// 示例 6: 条件功能启用
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER >= @PROJECT_NAME_UPPER@_VERSION_CHECK(1, 1, 0)
+//     #define @PROJECT_NAME_UPPER@_HAS_ADVANCED_FEATURE 1
+// #else
+//     #define @PROJECT_NAME_UPPER@_HAS_ADVANCED_FEATURE 0
+// #endif
+
+// 示例 7: API 废弃警告
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER >= @PROJECT_NAME_UPPER@_VERSION_CHECK(2, 0, 0)
+//     [[deprecated("Use newMethod() instead")]]
+//     void oldMethod();
+// #else
+//     void oldMethod();
+// #endif
+
+// 示例 8: 多版本适配
+// 
+// #if @PROJECT_NAME_UPPER@_VERSION_NUMBER >= @PROJECT_NAME_UPPER@_VERSION_CHECK(2, 0, 0)
+//     // 2.0.0+ 实现
+//     #define USE_NEW_IMPL
+// #elif @PROJECT_NAME_UPPER@_VERSION_NUMBER >= @PROJECT_NAME_UPPER@_VERSION_CHECK(1, 5, 0)
+//     // 1.5.0-1.9.x 实现
+//     #define USE_STANDARD_IMPL
+// #else
+//     // 1.5.0 以下实现
+//     #define USE_LEGACY_IMPL
+// #endif
+
+#endif // @PROJECT_NAME_UPPER@_VERSION_H
