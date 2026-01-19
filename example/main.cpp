@@ -1,8 +1,13 @@
 #include <QApplication>
-#include "mainwindow.h"
+#include <QDebug>
+
 
 #include <ElaApplication.h>
 #include <ElaWindow.h>
+
+#include "Mel.h"
+
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,12 +15,13 @@ int main(int argc, char *argv[])
     eApp->init();
     
     // Set application information
-    QCoreApplication::setApplicationName("Qt Hello World");
     QCoreApplication::setApplicationVersion("1.0.0");
-    QCoreApplication::setOrganizationName("QtHelloWorld");
-    
+
     // MainWindow mainWindow;
     // mainWindow.show();
+
+    Mel::MelLib melLib;
+    qDebug() << "mel version:" << melLib.getVersion();
 
     ElaWindow window;
     window.show();
