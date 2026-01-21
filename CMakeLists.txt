@@ -26,11 +26,11 @@ include(cmake/qt_set.cmake)
 init_qt()
 
 # 构建选项
-option(BUILD_EXAMPLES "构建示例应用" ON)
+option(MEL_BUILD_EXAMPLES "构建示例应用" ON)
 
 add_subdirectory(Mel)
 
-if(BUILD_EXAMPLES)
+if(MEL_BUILD_EXAMPLES)
     add_subdirectory(example)
 endif()
 

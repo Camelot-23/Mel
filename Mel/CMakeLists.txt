@@ -22,14 +22,17 @@ file(GLOB_RECURSE ${PROJECT_NAME}_srcs CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/*.h
 )
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "" FILES ${${PROJECT_NAME}_srcs})
+# 添加 Qt 资源文件
+set(${PROJECT_NAME}_qrc ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.qrc)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "" FILES ${${PROJECT_NAME}_srcs} ${${PROJECT_NAME}_qrc})
 
 # 创建 ${PROJECT_NAME} 库
 if(${PROJECT_NAME_UPPER}_BUILD_SHARED)
-    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_srcs})
+    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_srcs} ${${PROJECT_NAME}_qrc})
     message(STATUS "${PROJECT_NAME} 将编译为动态库")
 else()
-    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_srcs})
+    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_srcs} ${${PROJECT_NAME}_qrc})
     message(STATUS "${PROJECT_NAME} 将编译为静态库")
 endif()
 

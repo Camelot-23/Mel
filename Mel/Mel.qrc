@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/Mel">
+        <!-- 1K 壁纸 -->
+        <file>res/wallpaper/1k/supernova.jpg</file>
+        
+        <!-- 2K 壁纸 -->
+        <file>res/wallpaper/2k/mountain&amp;lake.png</file>
+        <file>res/wallpaper/2k/Sunshine&amp;Maple_Forest.jpg</file>
+        
+        <!-- 4K 壁纸 -->
+        <file>res/wallpaper/4k/doomsday&amp;power_station.jpg</file>
+        <file>res/wallpaper/4k/road&amp;sakuar&amp;inverted_image.png</file>
+        <file>res/wallpaper/4k/room&amp;window.png</file>
+    </qresource>
+</RCC>

@@ -35,11 +35,12 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-# 引入 ElaWidgetTools（必须在创建目标之前）
+# 引入 ElaWidgetTools
 include(../cmake/ela.cmake)
+target_link_libraries(${PROJECT_NAME} PRIVATE ElaWidgetTools)
 
-# 链接 Mel ElaWidgetTools
-target_link_libraries(${PROJECT_NAME} PRIVATE Mel ElaWidgetTools)
+# 链接 Mel 库
+target_link_libraries(${PROJECT_NAME} PRIVATE Mel)
 
 # 目前看来generate_export_header会自动处理静态/动态库的宏定义,不用额外定义 MEL_STATIC_DEFINE
 # target_compile_definitions(${PROJECT_NAME} PRIVATE MEL_STATIC_DEFINE)
@@ -56,7 +57,8 @@ set(QT_PLUGINS
 
 if(WIN32)
     include(${CMAKE_SOURCE_DIR}/cmake/win_run.cmake)
-    copy_target(${PROJECT_NAME} Mel ElaWidgetTools)
+    # 只拷贝 Mel 库（不需要 ElaWidgetTools）
+    copy_target(${PROJECT_NAME} Mel)
 
     include(${CMAKE_SOURCE_DIR}/cmake/qt_win_run.cmake)
     copy_qt_libs(${PROJECT_NAME} ${QT_LIBS})
