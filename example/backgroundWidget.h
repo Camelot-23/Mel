@@ -1,5 +1,5 @@
 /**
- * @file backgroundwidget.h
+ * @file backgroundWidget.h
  * @brief 背景图片控件 - 支持自动缩放和居中显示
  */
 

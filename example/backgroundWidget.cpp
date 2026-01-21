@@ -1,9 +1,9 @@
 /**
- * @file backgroundwidget.cpp
+ * @file backgroundWidget.cpp
  * @brief 背景图片控件实现
  */
 
-#include "backgroundwidget.h"
+#include "backgroundWidget.h"
 #include <QDebug>
 #include <QPainter>
 #include <QPropertyAnimation>

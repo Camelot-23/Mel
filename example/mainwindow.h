@@ -15,7 +15,7 @@
 #include <QHBoxLayout>
 #include <QList>
 
-#include "backgroundwidget.h"
+#include "backgroundWidget.h"
 
 class MainWindow : public QMainWindow
 {
