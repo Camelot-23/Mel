@@ -1,14 +1,17 @@
 /**
- * @file backgroundWidget.h
+ * @file BackgroundWidget.h
  * @brief 背景图片控件 - 支持自动缩放和居中显示
  */
 
-#ifndef BACKGROUNDWIDGET_H
-#define BACKGROUNDWIDGET_H
+#ifndef MEL_BACKGROUNDWIDGET_H
+#define MEL_BACKGROUNDWIDGET_H
 
+#include "Mel_export.h"
 #include <QWidget>
 
 class QPropertyAnimation;
+
+namespace Mel {
 
 /**
  * @brief 背景图片缩放模式
@@ -28,8 +31,9 @@ enum BackgroundScaleMode {
  * - 多种缩放模式（填满/适应/拉伸）
  * - 支持背景色和遮罩
  */
-class BackgroundWidget : public QWidget {
-    Q_OBJECT public:
+class MEL_EXPORT BackgroundWidget : public QWidget {
+    Q_OBJECT
+public:
     explicit BackgroundWidget(QWidget *parent = nullptr);
 
     ~BackgroundWidget() override;
@@ -180,4 +184,6 @@ private:
     Q_PROPERTY(qreal transitionOpacity READ getTransitionOpacity WRITE setTransitionOpacity)
 };
 
-#endif // BACKGROUNDWIDGET_H
+} // namespace Mel
+
+#endif // MEL_BACKGROUNDWIDGET_H

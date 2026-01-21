@@ -20,12 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
     , _descLabel(nullptr)
     , _wallpaperCombo(nullptr)
     , _scaleModeCombo(nullptr)
-    , _themeButton(nullptr)
     , _colorButton(nullptr)
     , _clearButton(nullptr)
     , _infoButton(nullptr)
     , _currentWallpaperIndex(0)
-    , _isDarkTheme(false)
 {
     initWallpapers();
     setupUi();
@@ -77,8 +75,8 @@ void MainWindow::setupUi()
     mainHBoxLayout->setSpacing(0);
     
     // ========== 左侧：背景预览区域 ==========
-    _backgroundWidget = new BackgroundWidget(centralWidget);
-    _backgroundWidget->setScaleMode(ScaleMode_Fill);  // 默认填满模式
+    _backgroundWidget = new Mel::BackgroundWidget(centralWidget);
+    _backgroundWidget->setScaleMode(Mel::ScaleMode_Fill);  // 默认填满模式
     _backgroundWidget->setTransitionDuration(500);     // 设置背景切换动画时长为500毫秒
     _backgroundWidget->setMinimumSize(600, 400);       // 设置最小尺寸
     
@@ -202,8 +200,7 @@ void MainWindow::setupUi()
     // 填充下拉框选项
     for (const auto& wallpaper : _wallpapers) {
         QString itemText = QString("%1 [%2]")
-            .arg(wallpaper.displayName)
-            .arg(wallpaper.resolution);
+            .arg(wallpaper.displayName, wallpaper.resolution);
         _wallpaperCombo->addItem(itemText);
     }
     
@@ -222,9 +219,9 @@ void MainWindow::setupUi()
     
     _scaleModeCombo = new QComboBox(_contentWidget);
     _scaleModeCombo->setMinimumHeight(40);
-    _scaleModeCombo->addItem("填满窗口（裁剪）", ScaleMode_Fill);
-    _scaleModeCombo->addItem("适应窗口（留空）", ScaleMode_Fit);
-    _scaleModeCombo->addItem("拉伸填充（变形）", ScaleMode_Stretch);
+    _scaleModeCombo->addItem("填满窗口（裁剪）", Mel::ScaleMode_Fill);
+    _scaleModeCombo->addItem("适应窗口（留空）", Mel::ScaleMode_Fit);
+    _scaleModeCombo->addItem("拉伸填充（变形）", Mel::ScaleMode_Stretch);
     _scaleModeCombo->setCurrentIndex(0);
     
     // 设置缩放模式下拉框样式
@@ -239,29 +236,6 @@ void MainWindow::setupUi()
     _mainLayout->addStretch();
     
     // ========== 按钮区域 ==========
-    QString buttonStyle = 
-        "QPushButton {"
-        "   background-color: #4a90e2;"
-        "   color: white;"
-        "   border: none;"
-        "   border-radius: 6px;"
-        "   padding: 12px;"
-        "   font-size: 13px;"
-        "   font-weight: bold;"
-        "}"
-        "QPushButton:hover {"
-        "   background-color: #357abd;"
-        "}"
-        "QPushButton:pressed {"
-        "   background-color: #2a5f8f;"
-        "}";
-    
-    // 主题切换按钮
-    _themeButton = new QPushButton("🌙 深色主题", _contentWidget);
-    _themeButton->setMinimumHeight(45);
-    _themeButton->setStyleSheet(buttonStyle);
-    connect(_themeButton, &QPushButton::clicked, this, &MainWindow::onThemeToggled);
-    _mainLayout->addWidget(_themeButton);
     
     // 背景色选择按钮
     _colorButton = new QPushButton("🎨 选择背景色", _contentWidget);
@@ -339,7 +313,7 @@ void MainWindow::setupUi()
                 "功能:\n"
                 "• 6 张精美壁纸 (1K/2K/4K)\n"
                 "• 平滑的淡入淡出切换动画\n"
-                "• 主题切换支持\n"
+                "• 背景色选择功能\n"
                 "• 实时背景更新\n\n"
                 "资源已嵌入程序，无需外部文件"
             ).arg(Mel::MelLib::getVersion())
@@ -348,8 +322,7 @@ void MainWindow::setupUi()
     _mainLayout->addWidget(_infoButton);
 }
 
-void MainWindow::setCurrentWallpaper(const QString& resourcePath)
-{
+void MainWindow::setCurrentWallpaper(const QString& resourcePath) const {
     // 使用 BackgroundWidget 设置背景图片
     if (!_backgroundWidget->setBackgroundImage(resourcePath)) {
         qWarning() << "MainWindow: 无法设置壁纸:" << resourcePath;
@@ -359,7 +332,7 @@ void MainWindow::setCurrentWallpaper(const QString& resourcePath)
     qDebug() << "MainWindow: 壁纸设置成功:" << resourcePath;
 }
 
-void MainWindow::onWallpaperChanged(int index)
+void MainWindow::onWallpaperChanged(const int index)
 {
     if (index >= 0 && index < _wallpapers.size()) {
         _currentWallpaperIndex = index;
@@ -369,9 +342,8 @@ void MainWindow::onWallpaperChanged(int index)
     }
 }
 
-void MainWindow::onScaleModeChanged(int index)
-{
-    const BackgroundScaleMode mode = static_cast<BackgroundScaleMode>(
+void MainWindow::onScaleModeChanged(const int index) const {
+    const Mel::BackgroundScaleMode mode = static_cast<Mel::BackgroundScaleMode>(
         _scaleModeCombo->itemData(index).toInt()
     );
     
@@ -380,29 +352,7 @@ void MainWindow::onScaleModeChanged(int index)
     qDebug() << "MainWindow: 缩放模式已切换";
 }
 
-void MainWindow::onThemeToggled()
-{
-    _isDarkTheme = !_isDarkTheme;
-    
-    if (_isDarkTheme) {
-        _themeButton->setText("☀️ 浅色主题");
-        
-        // 深色主题：添加半透明黑色遮罩
-        _backgroundWidget->setOverlayColor(QColor(0, 0, 0, 80));
-        
-        qDebug() << "MainWindow: 切换到深色主题";
-    } else {
-        _themeButton->setText("🌙 深色主题");
-        
-        // 浅色主题：清除遮罩
-        _backgroundWidget->clearOverlay();
-        
-        qDebug() << "MainWindow: 切换到浅色主题";
-    }
-}
-
-void MainWindow::onClearBackground()
-{
+void MainWindow::onClearBackground() const {
     // 清除背景图片
     _backgroundWidget->clearBackground();
     
@@ -432,5 +382,9 @@ void MainWindow::onSelectBackgroundColor()
     if (color.isValid()) {
         _backgroundWidget->setBackgroundColor(color);
         qDebug() << "MainWindow: 背景色已设置为:" << color.name() << "透明度:" << color.alpha();
+    } else {
+        // 用户点击了取消，清除背景色
+        _backgroundWidget->setBackgroundColor(QColor());
+        qDebug() << "MainWindow: 已清除背景色";
     }
 }

@@ -1,12 +1,14 @@
 /**
- * @file backgroundWidget.cpp
+ * @file BackgroundWidget.cpp
  * @brief 背景图片控件实现
  */
 
-#include "backgroundWidget.h"
+#include "BackgroundWidget.h"
 #include <QDebug>
 #include <QPainter>
 #include <QPropertyAnimation>
+
+namespace Mel {
 
 BackgroundWidget::BackgroundWidget(QWidget *parent) :
     QWidget(parent), _scaleMode(ScaleMode_Fill), _smoothTransformation(true), _backgroundColor(QColor()) // 默认无效颜色（透明）
@@ -133,6 +135,12 @@ void BackgroundWidget::setTransitionOpacity(const qreal opacity) {
 // ========== 受保护方法 ==========
 
 void BackgroundWidget::paintEvent(QPaintEvent *event) {
+    // 如果没有背景图片、背景色和遮罩，完全等同于普通 QWidget
+    if (_scaledBackground.isNull() && !_backgroundColor.isValid() && !hasOverlay()) {
+        QWidget::paintEvent(event);
+        return;
+    }
+    
     Q_UNUSED(event);
 
     QPainter painter(this);
@@ -151,7 +159,6 @@ void BackgroundWidget::paintEvent(QPaintEvent *event) {
             painter.fillRect(rect(), _overlayColor);
         }
 
-        // 如果背景色无效，不绘制任何内容
         QWidget::paintEvent(event);
         return;
     }
@@ -240,3 +247,6 @@ void BackgroundWidget::drawDefaultBackground(QPainter &painter) const {
     }
     // 如果背景色无效，则不绘制任何内容（保持透明或系统默认）
 }
+
+} // namespace Mel
+

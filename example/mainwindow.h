@@ -15,7 +15,7 @@
 #include <QHBoxLayout>
 #include <QList>
 
-#include "backgroundWidget.h"
+#include "BackgroundWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,26 +27,24 @@ public:
 
 private slots:
     void onWallpaperChanged(int index);
-    void onScaleModeChanged(int index);
-    void onThemeToggled();
-    void onClearBackground();
+    void onScaleModeChanged(int index) const;
+    void onClearBackground() const;
     void onSelectBackgroundColor();
 
 private:
     void setupUi();
     void initWallpapers();
-    void setCurrentWallpaper(const QString& resourcePath);
+    void setCurrentWallpaper(const QString& resourcePath) const;
 
     // UI 组件
-    BackgroundWidget* _backgroundWidget;  // 背景控件（左侧）
-    QWidget* _contentWidget;              // 控制面板（右侧）
+    Mel::BackgroundWidget* _backgroundWidget;  // 背景控件（左侧）
+    QWidget* _contentWidget;                   // 控制面板（右侧）
     QVBoxLayout* _mainLayout;             // 控制面板的主布局
     
     QLabel* _titleLabel;
     QLabel* _descLabel;
     QComboBox* _wallpaperCombo;
     QComboBox* _scaleModeCombo;
-    QPushButton* _themeButton;
     QPushButton* _colorButton;
     QPushButton* _clearButton;
     QPushButton* _infoButton;
@@ -60,9 +58,6 @@ private:
     
     QList<WallpaperInfo> _wallpapers;
     int _currentWallpaperIndex;
-    
-    // 主题
-    bool _isDarkTheme;
 };
 
 #endif // MAINWINDOW_H
