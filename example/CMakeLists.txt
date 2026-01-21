@@ -1,6 +1,13 @@
 # Example 示例应用
 project(Mel_Example VERSION 1.0.0)
 
+# 调试：输出 Qt 自动工具变量的值
+message(STATUS "========== Example Qt 自动工具状态 ==========")
+message(STATUS "CMAKE_AUTOMOC: ${CMAKE_AUTOMOC}")
+message(STATUS "CMAKE_AUTOUIC: ${CMAKE_AUTOUIC}")
+message(STATUS "CMAKE_AUTORCC: ${CMAKE_AUTORCC}")
+message(STATUS "=============================================")
+
 # 扫描 example 源文件
 file(GLOB_RECURSE example_srcs CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
@@ -13,6 +20,14 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "" FILES ${example_srcs})
 
 # 创建可执行文件
 add_executable(${PROJECT_NAME} ${example_srcs})
+
+# 注意：AUTOMOC/AUTOUIC/AUTORCC 已在顶层 CMakeLists.txt 中通过 init_qt() 全局设置
+# 理论上不需要在这里重复设置，但某些情况下显式设置更可靠
+# set_target_properties(${PROJECT_NAME} PROPERTIES
+#     AUTOMOC ON
+#     AUTOUIC ON
+#     AUTORCC ON
+# )
 
 # Windows 平台不显示控制台窗口
 if(WIN32)
@@ -35,6 +50,10 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+# 链接 Qt 库
+set(QT_LIBS Widgets)
+set_qt_libs(${PROJECT_NAME} ${QT_LIBS})
+
 # 引入 ElaWidgetTools
 include(../cmake/ela.cmake)
 target_link_libraries(${PROJECT_NAME} PRIVATE ElaWidgetTools)
@@ -45,8 +64,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Mel)
 # 目前看来generate_export_header会自动处理静态/动态库的宏定义,不用额外定义 MEL_STATIC_DEFINE
 # target_compile_definitions(${PROJECT_NAME} PRIVATE MEL_STATIC_DEFINE)
 
-# Windows 平台特定配置
-set(QT_LIBS Core Gui Widgets)
+# Windows 平台特定配置（用于拷贝运行时文件）
+set(QT_RUNTIME_LIBS Core Gui Widgets)
 # MinGW 需要额外的运行时库
 set(QT_PATH_LIBS libwinpthread-1 libstdc++-6 libgcc_s_seh-1)
 set(QT_PLUGINS
@@ -61,7 +80,7 @@ if(WIN32)
     copy_target(${PROJECT_NAME} Mel)
 
     include(${CMAKE_SOURCE_DIR}/cmake/qt_win_run.cmake)
-    copy_qt_libs(${PROJECT_NAME} ${QT_LIBS})
+    copy_qt_libs(${PROJECT_NAME} ${QT_RUNTIME_LIBS})
     if (MINGW)
         copy_qt_path_libs(${PROJECT_NAME} ${QT_PATH_LIBS})
     endif()

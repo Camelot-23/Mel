@@ -7,15 +7,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QWidget>
-#include <QLabel>
-#include <QComboBox>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QList>
 
-#include "BackgroundWidget.h"
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
@@ -27,27 +22,17 @@ public:
 
 private slots:
     void onWallpaperChanged(int index);
-    void onScaleModeChanged(int index) const;
-    void onClearBackground() const;
+    void onScaleModeChanged(int index);
+    void onClearBackground();
     void onSelectBackgroundColor();
+    void onShowAbout();
 
 private:
-    void setupUi();
+    void initUi();
     void initWallpapers();
-    void setCurrentWallpaper(const QString& resourcePath) const;
-
-    // UI 组件
-    Mel::BackgroundWidget* _backgroundWidget;  // 背景控件（左侧）
-    QWidget* _contentWidget;                   // 控制面板（右侧）
-    QVBoxLayout* _mainLayout;             // 控制面板的主布局
+    void setCurrentWallpaper(const QString& resourcePath);
     
-    QLabel* _titleLabel;
-    QLabel* _descLabel;
-    QComboBox* _wallpaperCombo;
-    QComboBox* _scaleModeCombo;
-    QPushButton* _colorButton;
-    QPushButton* _clearButton;
-    QPushButton* _infoButton;
+    Ui::MainWindow *ui;
     
     // 壁纸数据
     struct WallpaperInfo {

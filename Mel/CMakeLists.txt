@@ -1,5 +1,12 @@
 project(Mel VERSION 1.0.1)
 
+# 调试：输出 Qt 自动工具变量的值
+message(STATUS "========== Mel Qt 自动工具状态 ==========")
+message(STATUS "CMAKE_AUTOMOC: ${CMAKE_AUTOMOC}")
+message(STATUS "CMAKE_AUTOUIC: ${CMAKE_AUTOUIC}")
+message(STATUS "CMAKE_AUTORCC: ${CMAKE_AUTORCC}")
+message(STATUS "==========================================")
+
 # 将项目名称转换为大写，用于宏定义
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
