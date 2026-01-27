@@ -2,6 +2,7 @@
 #include <QDebug>
 #include "Mel.h"
 #include "mainwindow.h"
+#include "BackgroundWidgetExample.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,8 +27,9 @@ int main(int argc, char *argv[])
     qDebug() << "=================================";
 
     // 创建并显示主窗口
-    MainWindow mainWindow;
-    mainWindow.show();
+    // MainWindow w;
+    BackgroundWidgetExample w;
+    w.show();
 
-    return app.exec();
+    return QApplication::exec();
 }

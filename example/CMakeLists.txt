@@ -10,9 +10,9 @@ message(STATUS "=============================================")
 
 # 扫描 example 源文件
 file(GLOB_RECURSE example_srcs CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.ui
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
 )
 
 # 在 IDE 中按目录结构组织文件
