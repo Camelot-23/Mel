@@ -67,6 +67,11 @@ target_include_directories(${PROJECT_NAME}
 set(QT_LIBS Widgets)
 set_qt_libs(${PROJECT_NAME} ${QT_LIBS})
 
+# Windows 平台链接 dwmapi
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi)
+endif()
+
 # 设置编译选项
 if(MSVC)
     # 移除默认的 /W3，避免与 /W4 冲突

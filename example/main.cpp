@@ -3,6 +3,7 @@
 #include "Mel.h"
 #include "mainwindow.h"
 #include "BackgroundWidgetExample.h"
+#include "widgets/ElMainWindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,20 +16,18 @@ int main(int argc, char *argv[])
 
     // 打印 Mel 库版本信息
     qDebug() << "=================================";
-    qDebug() << "Mel 壁纸切换演示 (Qt Native)";
-    qDebug() << "=================================";
     qDebug() << "Mel 库版本:" << Mel::MelLib::getVersion();
     qDebug() << "主版本号:" << Mel::MelLib::getVersionMajor();
     qDebug() << "次版本号:" << Mel::MelLib::getVersionMinor();
     qDebug() << "补丁版本号:" << Mel::MelLib::getVersionPatch();
     qDebug() << "=================================";
-    qDebug() << "可用壁纸: 6 张 (1K/2K/4K)";
-    qDebug() << "使用纯 Qt 原生控件实现";
-    qDebug() << "=================================";
 
     // 创建并显示主窗口
     // MainWindow w;
-    BackgroundWidgetExample w;
+    // BackgroundWidgetExample w;
+    Mel::ElMainWindow w;
+    w.setWindowTitle("Mel ElMainWindow Demo");
+    w.resize(800, 600);
     w.show();
 
     return QApplication::exec();
